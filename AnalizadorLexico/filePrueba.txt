@@ -1,0 +1,37 @@
+/* --------------------------------------------------
+   Archivo de prueba para ArchEspFlex.l
+   Cubre:
+   – Palabras reservadas
+   – Identificadores
+   – Literales numéricas y de cadena
+   – Comentarios de línea y bloque
+   – Operadores relacionales y aritméticos
+   – Puntuación: ; , () {} []
+   --------------------------------------------------*/
+
+rutina principal {
+    // Declaración de variables
+    contador = 123;
+    mensaje = "Linea 1\nLinea 2";
+
+    /* Bucle de ejemplo */
+    mientras (contador < 130) haz {
+        contador = contador + 1;
+        resultado = contador * 2 / 4;
+    }
+
+    // Condicional
+    si (contador >= 130) entonces {
+        regresa contador;
+    } otro {
+        regresa 0;
+    }
+}
+
+/* Prueba de operadores relacionales compuestos */
+si (contador <= 200 && contador != 0) entonces {
+    // Nota: el operador && no está definido en el léxico; si lo añades, inclúyelo en las reglas.
+}
+
+/* Prueba de accesos con corchetes */
+miArreglo [ 10 ];
