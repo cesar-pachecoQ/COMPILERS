@@ -1,0 +1,62 @@
+/* --------------------------------------------------
+   Archivo de prueba para Analizador Flex
+   Contiene casos de:
+     ✔ Palabras reservadas y identificadores
+     ✔ Literales numéricas y de cadena
+     ✔ Comentarios de línea y bloque
+     ✔ Operadores relacionales y aritméticos
+     ✔ Puntuación: ; , () {} []
+     ✖ Casos erróneos: tokens desconocidos, números mal formados,
+       cadenas o comentarios no cerrados
+   --------------------------------------------------*/
+
+/* ==== SECCIÓN 1: CASOS VÁLIDOS ==== */
+
+rutina principal {                      // palabra reservada + identificador
+    // Declaración y asignación
+    contador = 123;                    // literal entera
+    precio = 45.67;                    // literal flotante
+    mensaje = "Hola\nMundo";           // literal de cadena con escape
+    miArreglo[10] = contador;          // acceso a arreglo y puntuación
+
+    /* Bucle válido */
+    mientras (contador < 130) haz {
+        contador = contador + 1;
+        resultado = contador * 2 / 4;
+    }
+
+    // Condicional válido
+    si (contador >= 130) entonces {
+        regresa contador;
+    } otro {
+        regresa 0;
+    }
+}
+
+/* ==== SECCIÓN 2: CASOS NO VÁLIDOS ==== */
+
+rutina errónea {                        // identificador con tilde: si no está en el léxico, marca error
+    valor$ = 42;                        // '$' no reconocido
+    numero_mal = 123.45.67;             // literal numérica mal formada
+    texto = "Cadena sin cierre;        // cadena no cerrada
+    comentario = /* comentario sin fin   // comentario de bloque no cerrado
+
+    cond = a && b;                      // '&&' no definido como operador
+    otroOp = a <> b;                    // '<>' no reconocido (si solo tienes < y >)
+    
+    // Operador parcialmente erróneo
+    resta = 10 - -5;                    // doble menos puede confundirse
+    inc = ++contador;                   // '++' si no está en reglas, debe marcarse
+
+    @tokenInvalido = 0;                 // '@' carácter inválido
+    #define X 10                       // '#' no reconocido
+}
+
+/* ==== SECCIÓN 3: CASOS LÍMITE ==== */
+
+hexVal = 0x1A3F;                       // si tu léxico incluye hexadecimales
+binVal = 0b10102;                     // '2' inválido en literal binaria
+grande = 999999999999999999999;       // literal muy grande, ¿lo aceptas?
+cadenaVacia = "";                     // cadena vacía válida
+
+/* ==== FIN DE PRUEBAS ==== */

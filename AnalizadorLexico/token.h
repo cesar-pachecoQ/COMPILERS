@@ -3,6 +3,7 @@
 
 typedef enum {
     // — Palabras reservadas (solo nombre) —
+    TOK_ENTERO,
     TOK_RUTINA,
     TOK_PRINCIPAL,
     TOK_SI,
@@ -10,12 +11,12 @@ typedef enum {
     TOK_OTRO,
     TOK_MIENTRAS,
     TOK_HAZ,
-    TOK_REGRESA,
-    TOK_NUMERO,          // Número entero
+    TOK_REGRESA,        // Número entero
 
     // — Identificadores y literales (solo nombre) —
     TOK_IDENTIFICADOR,      // ((l | d))*
-    TOK_ENTERO,             // d+
+    TOK_NUMERO,             // d+
+    // — Cadenas
     TOK_CADENA,             // "C*"
 
     // — Símbolos ASCII (asignados al carácter) —

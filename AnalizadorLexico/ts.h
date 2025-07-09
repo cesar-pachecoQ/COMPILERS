@@ -6,22 +6,20 @@
 #define MAX_NOMBRE 70
 #define MAX_TS     200
 
-/* --- Estructura de un nodo (idéntica a la de ts.c) --- */
 struct Nodo {
     char Nombre[MAX_NOMBRE];
     int  Ntoken;
     int  tipo;
 };
 
-/* --- Variables globales definidas en ts.c --- */
 extern struct Nodo TS[MAX_TS];
 extern int          Nelements;
 
-/* --- Prototipos de las funciones que ofreces --- */
-int  Alta      (int Ntoken, const char Nombre[MAX_NOMBRE], int tipo);
-int  Baja      (const char Nombre[MAX_NOMBRE]);
-int  Consulta  (const char Nombre[MAX_NOMBRE]);
-int  Posicion  (const char Nombre[MAX_NOMBRE]);
-void ImprimeTS (void);
+// Corregir prototipos para usar const char*
+int  Alta      (int Ntoken, const char *Nombre, int tipo);
+int  Baja      (const char *Nombre);
+int  Consulta  (const char *Nombre);
+int  Posicion  (const char *Nombre);
+void ImprimeTS (FILE *f);
 
 #endif /* TS_H */

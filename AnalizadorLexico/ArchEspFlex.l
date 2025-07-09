@@ -7,36 +7,46 @@
 
 extern int yylineno;    
 extern FILE *yyin;      
-extern FILE *errores;   
+extern FILE *errores;
+extern int Valor_num = 0;
+extern int ap_id = -1;
+extern int ap_cad = -1;
+
+void insertar_en_ts(const char* nombre) {
+    ap_id = Alta(TOK_IDENTIFICADOR, nombre, 0);
+}
+
+void insertar_en_tc(const char* cadena) {
+    ap_cad = Alta(TOK_CADENA, cadena, 1);
+}
+
 %}
 
+%option yylineno
 %option noyywrap        
-%option yylineno        
-
 
 DIGITO      [0-9]
 LETRA       [A-Za-z]
 ID          {LETRA}({LETRA}|{DIGITO})*
 CADENA      \"([^\"\\]|\\.)*\"
 
-
-
 %%
-"rutina"        { return TOK_RUTINA; }
-"principal"     { return TOK_PRINCIPAL; }
-"si"            { return TOK_SI; }
-"entonces"      { return TOK_ENTONCES; }
-"otro"          { return TOK_OTRO; }
-"mientras"      { return TOK_MIENTRAS; }
-"haz"           { return TOK_HAZ; }
-"regresa"       { return TOK_REGRESA; }
+"entero"     { return TOK_ENTERO; }
+"rutina"     { return TOK_RUTINA; }
+"principal"  { return TOK_PRINCIPAL; }
+"si"         { return TOK_SI; }
+"entonces"   { return TOK_ENTONCES; }
+"otro"       { return TOK_OTRO; }
+"mientras"   { return TOK_MIENTRAS; }
+"haz"        { return TOK_HAZ; }
+"regresa"    { return TOK_REGRESA; }
 
 {ID}            {
                     insertar_en_ts(yytext);
                     return TOK_IDENTIFICADOR;
                 }
 {DIGITO}+       {
-                    yylval.valor_entero = atoi(yytext);
+                    Valor_num = atoi(yytext);
                     return TOK_NUMERO;
                 }
 {CADENA}        {
@@ -71,7 +81,6 @@ CADENA      \"([^\"\\]|\\.)*\"
 
 [ \t\r]+        { /* ignóralos */ }
 \n              { /* Flex suma automáticamente yylineno */ }
-
 .               {
                     fprintf(errores,
                             "%d\t%s\tToken inválido\n",
@@ -79,4 +88,3 @@ CADENA      \"([^\"\\]|\\.)*\"
                             yytext);
                 }
 %%
-

@@ -4,30 +4,25 @@
 #include <string.h>
 #include "ts.h"
 
-// Definición de un nodo de la tabla de símbolos
-struct Nodo {
-    char Nombre[70];   // Nombre del símbolo
-    int Ntoken;        // Número de token asociado
-    int tipo;          // Tipo del símbolo (p.ej. variable, función, etc.)
-};
 
 // Tabla de símbolos: arreglo estático de hasta 200 nodos
-struct Nodo TS[200];
+struct Nodo TS[MAX_TS];
+
 
 // Número de elementos actualmente en la tabla
 int Nelements = 0;
 
-// Prototipos de funciones
-int Alta(int Ntoken, char Nombre[70], int tipo);
-int Baja(char Nombre[70]);
-int Consulta(char Nombre[70]);
-void ImprimeTS(void);
-int Posicion(char Nombre[70]);
 
 // Inserta un nuevo símbolo en la tabla
-int Alta(int Ntoken, char Nombre[70], int tipo) {
+int Alta(int Ntoken, const char *Nombre, int tipo) {
+    // Si el token ya exite, evitamos crear un duplicado
+    int pos = Consulta(Nombre);
+    if (pos >= 0) {
+        // Si sí, devolvemos la posición que ya había
+        return pos;
+    }
     // Si la tabla está llena, no se puede insertar
-    if (Nelements == 200) {
+    if (Nelements >= MAX_TS) {
         printf("Tabla de símbolos llena\n");
         return -1;
     }
@@ -38,13 +33,13 @@ int Alta(int Ntoken, char Nombre[70], int tipo) {
     // Asigna el tipo
     TS[Nelements].tipo   = tipo;
     // Incrementa el contador de elementos
+    int posicion = Nelements;
     Nelements++;
-    // Éxito
-    return 1;
+    return posicion;  // Devuelve la posición del nuevo símbolo
 }
 
 // Elimina un símbolo de la tabla
-int Baja(char Nombre[70]) {
+int Baja(const char *Nombre) {
     int pos;
     // Si no hay elementos, no se puede eliminar
     if (Nelements == 0) {
@@ -69,7 +64,7 @@ int Baja(char Nombre[70]) {
 }
 
 // Devuelve la posición de un símbolo (o -1 si no existe)
-int Consulta(char Nombre[70]) {
+int Consulta(const char *Nombre) {
     // Recorre todos los elementos actuales
     for (int i = 0; i < Nelements; i++) {
         // Compara cadenas; strcmp == 0 significa coincidencia
@@ -82,19 +77,20 @@ int Consulta(char Nombre[70]) {
 }
 
 // (alternativa interna) Mismo comportamiento que Consulta
-int Posicion(char Nombre[70]) {
+int Posicion(const char *Nombre) {
     return Consulta(Nombre);
 }
 
 // Imprime el contenido de la tabla de símbolos
-void ImprimeTS(void) {
-    // Recorre todos los elementos actuales
+void ImprimeTS(FILE *f) {
+    fprintf(f, "Tabla de Símbolos:\n");
+    fprintf(f, "Índice  Nombre                          Ntoken  Tipo\n");
     for (int i = 0; i < Nelements; i++) {
-        // Imprime índice y datos de cada nodo
-        printf("Posición: %d\n", i);
-        printf("  Nombre del símbolo: %s\n", TS[i].Nombre);
-        printf("  Número de token:    %d\n", TS[i].Ntoken);
-        printf("  Tipo:               %d\n", TS[i].tipo);
+        fprintf(f, "%3d  %-*s  %3d  %3d\n",
+                i,
+                MAX_NOMBRE, TS[i].Nombre,
+                TS[i].Ntoken,
+                TS[i].tipo);
     }
 }
 
