@@ -3,7 +3,7 @@
 
 typedef enum {
     // — Palabras reservadas (solo nombre) —
-    TOK_ENTERO,
+    TOK_ENTERO = 257,
     TOK_RUTINA,
     TOK_PRINCIPAL,
     TOK_SI,
@@ -43,7 +43,10 @@ typedef enum {
     TOK_IGUAL_IGUAL,        // ==
 
     // Token especial de fin de archivo
-    TOK_EOF
+    TOK_EOF = 0,
+    // Token especial para errores
+    TOK_ERROR = 1,
+    TOK_UNKNOWN = 2
 } Token;
 
 #endif // TOKENS_H

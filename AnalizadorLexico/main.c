@@ -1,79 +1,119 @@
-// main.c
 #include <stdio.h>
 #include <stdlib.h>
-#include "token.h"
-#include "ts.h"
+#include "token.h"   /* Definición de TOK_* */
+#include "ts.h"      /* Alta(), ImprimeTS() */
 
-// Prototipos y variables del scanner (definidos en lex.yy.c)
-int yylex(void);
-extern FILE *yyin;        // archivo de entrada
-extern char *yytext;      // texto del token actual
-extern int yylineno;      // número de línea
-extern int Valor_num;     // atributo numérico
-extern int ap_id;         // posición en tabla de símbolos
-extern int ap_cad;        // posición en tabla de cadenas (TS)
-extern FILE *errores;     // fichero para errores léxicos
+extern FILE *yyin;
+extern int yylex(void);
+extern char *yytext;
+extern int yylineno;
 
-// Código principal
-int main(int argc, char *argv[]) {
-    if (argc != 2) {
-        fprintf(stderr, "Uso: %s <archivo_prueba.txt>\n", argv[0]);
-        return EXIT_FAILURE;
+// Variables del analizador
+extern int Valor_num;
+extern NodoPointer ap_id;
+extern IndexTablaCadenas pos_cad;
+extern int indice_cadena_actual;
+
+// Funciones de manejo de errores
+extern void inicializarErrores();
+extern void finalizarErrores();
+extern int num_errores;
+
+int main(int argc, char **argv) {
+    if (argc < 2) {
+        fprintf(stderr, "Uso: %s <archivo_entrada>\n", argv[0]);
+        return 1;
     }
 
-    // 1) Abrir archivo de prueba
+    /* Abrir archivo de entrada */
     yyin = fopen(argv[1], "r");
     if (!yyin) {
-        perror("Error abriendo archivo de prueba");
-        return EXIT_FAILURE;
+        perror("Error al abrir archivo de entrada");
+        return 1;
     }
 
-    // 2) Preparar ficheros de salida
-    errores = fopen("errores.txt", "w");
-    if (!errores) {
-        perror("Error abriendo errores.txt");
-        return EXIT_FAILURE;
-    }
-    FILE *f_tabla = fopen("tabla.txt", "w");
-    if (!f_tabla) {
-        perror("Error abriendo tabla.txt");
-        return EXIT_FAILURE;
-    }
+    /* Inicializar estructuras */
+    inicializarTablaCadenas();
+    inicializarErrores();
 
-    // 3) Bucle de tokenización
-    int tok;
-    while ((tok = yylex()) != TOK_EOF) {
-        int attr = 0;
-        switch (tok) {
+    printf("=== ANÁLISIS LÉXICO ===\n");
+    printf("Archivo: %s\n\n", argv[1]);
+    printf("Línea\tCódigo\tLexema\t\tAtributo\n");
+    printf("-----\t------\t------\t\t--------\n");
+
+    /* Bucle de análisis */
+    int token;
+    while ((token = yylex()) != 0) {
+        if (token == TOK_ERROR) {
+            continue; // Error ya reportado
+        }
+        
+        printf("%3d\t%d\t%-15s\t", yylineno, token, yytext);
+        
+        switch (token) {
             case TOK_NUMERO:
-                attr = Valor_num;       // el valor numérico
+                printf("%d", Valor_num);
                 break;
             case TOK_IDENTIFICADOR:
-                attr = ap_id;           // posición en TS
+                if (ap_id != NULL) {
+                    printf("pos: %ld", ap_id - TS);
+                } else {
+                    printf("ERROR");
+                }
                 break;
             case TOK_CADENA:
-                attr = ap_cad;          // posición en TS (cadenas)
+                printf("pos: %d", indice_cadena_actual);
                 break;
             default:
-                attr = 0;               // sin atributo
+                printf("—");
+                break;
         }
-        // Formato: código_token    yytext    atributo
-        fprintf(f_tabla, "%d\t%s\t%d\n", tok, yytext, attr);
+        printf("\n");
     }
 
-    // 4) Cerrar flujos de análisis
+    /* Cerrar archivo de entrada */
     fclose(yyin);
-    fclose(errores);
-    fclose(f_tabla);
 
-    // 5) Volcar tabla de símbolos (e incluso cadenas) 
-    FILE *f_ts = fopen("tabla_simbolos.txt", "w");
-    if (!f_ts) {
-        perror("Error abriendo tabla_simbolos.txt");
-        return EXIT_FAILURE;
+    /* Generar archivos de salida */
+    printf("\n=== GENERANDO REPORTES ===\n");
+    
+    // Tabla de símbolos
+    FILE *salida_ts = fopen("tabla_salida.md", "w");
+    if (salida_ts) {
+        ImprimeTS(salida_ts);
+        fclose(salida_ts);
+        printf("✓ Tabla de símbolos: tabla_salida.md\n");
     }
-    ImprimeTS(f_ts);
-    fclose(f_ts);
+    
+    // Tabla de cadenas
+    FILE *salida_cad = fopen("tabla_cadenas.md", "w");
+    if (salida_cad) {
+        imprimirTablaCadenas(salida_cad);
+        fclose(salida_cad);
+        printf("✓ Tabla de cadenas: tabla_cadenas.md\n");
+    }
 
-    return EXIT_SUCCESS;
+    // También imprimir en consola
+    printf("\n=== TABLA DE SÍMBOLOS ===\n");
+    ImprimeTS(stdout);
+    
+    printf("\n=== TABLA DE CADENAS ===\n");
+    imprimirTablaCadenas(stdout);
+
+    /* Finalizar manejo de errores */
+    finalizarErrores();
+
+    /* Reporte final */
+    printf("\n=== RESUMEN ===\n");
+    printf("Símbolos encontrados: %d\n", Nelements);
+    printf("Cadenas encontradas: %d\n", pos_cad);
+    
+    if (num_errores > 0) {
+        printf("⚠️  Errores encontrados: %d\n", num_errores);
+        printf("   Ver detalles en: errores.txt\n");
+        return 1;
+    } else {
+        printf("✅ Análisis completado sin errores\n");
+        return 0;
+    }
 }
