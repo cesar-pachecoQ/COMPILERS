@@ -1,0 +1,206 @@
+// ===== ARCHIVO DE PRUEBA COMPLETO PARA ANALIZADOR LÉXICO =====
+// Diseñado para probar todos los tokens definidos en token.h
+
+// ===== SECCIÓN 1: TOKENS VÁLIDOS =====
+
+// 1.1 PALABRAS RESERVADAS (TOK_ENTERO a TOK_REGRESA)
+entero numero;
+rutina miFuncion;
+principal inicio;
+si condicion;
+entonces ejecutar;
+otro alternativa;
+mientras bucle;
+haz accion;
+regresa valor;
+
+// 1.2 NÚMEROS VÁLIDOS (TOK_NUMERO)
+0
+1
+42
+999
+12345
+9876543210
+
+// 1.3 IDENTIFICADORES VÁLIDOS (TOK_IDENTIFICADOR)
+a
+x
+variable
+contador
+miVariable
+Variable123
+numero1
+letra
+identificadorLargo
+var1
+var2var
+a1b2c3
+
+// 1.4 CADENAS VÁLIDAS (TOK_CADENA)
+""
+"a"
+"Hola"
+"Hola mundo"
+"Cadena con números 123"
+"Símbolos: @#$%^&*()"
+"Cadena muy larga con muchas palabras y caracteres especiales !@#$%"
+"123456789"
+"Variable y números: variable123"
+
+// 1.5 SÍMBOLOS ASCII SIMPLES
+;
+,
+(
+)
+{
+}
+[
+]
+>
+<
+=
++
+-
+*
+/
+
+// 1.6 OPERADORES DE DOS CARACTERES
+>=
+<=
+!=
+==
+
+// ===== SECCIÓN 2: PROGRAMA VÁLIDO COMPLETO =====
+
+// Programa que usa todos los tokens válidos
+rutina principal {
+    entero a = 10;
+    entero b = 20;
+    entero resultado = 0;
+    
+    si (a > b) entonces {
+        "a es mayor que b";
+        resultado = a;
+    } otro {
+        "b es mayor o igual que a";
+        resultado = b;
+    }
+    
+    mientras (a <= 100) haz {
+        a = a + 1;
+        si (a == 50) entonces {
+            "Llegamos a 50";
+        }
+    }
+    
+    entero arreglo[5];
+    arreglo[0] = 1;
+    arreglo[1] = 2;
+    
+    regresa resultado;
+}
+
+rutina calcular(entero x, entero y) {
+    entero suma = x + y;
+    entero resta = x - y;
+    entero multiplicacion = x * y;
+    entero division = x / y;
+    
+    si (suma >= 100) entonces {
+        "Suma grande";
+    }
+    
+    si (resta != 0) entonces {
+        "Resta no es cero";
+    }
+    
+    regresa suma;
+}
+
+// ===== SECCIÓN 3: CASOS DE ERROR INTENCIONADOS =====
+
+// 3.1 IDENTIFICADORES INVÁLIDOS
+123variable
+_variable
+variable-name
+variable.name
+var$name
+2abc
+
+// 3.2 CADENAS MAL FORMADAS
+"Cadena sin cerrar al final
+"Otra cadena sin cerrar
+Texto sin comillas al inicio ni al final
+"Solo comilla inicial
+Solo comilla final"
+
+// 3.3 NÚMEROS INVÁLIDOS
+123.45
+-123
++456
+123e10
+0x123
+
+// 3.4 CARACTERES NO VÁLIDOS
+@#$%^&
+¿¡€£¥
+°±²³´µ
+ñáéíóú
+çüöä
+
+// 3.5 OPERADORES MALFORMADOS
+= =
+> =
+< =
+! =
+===
+!==
+
+// 3.6 PALABRAS RESERVADAS MAL ESCRITAS
+Entero
+RUTINA
+Principal
+SI
+Entonces
+OTRO
+Mientras
+HAZ
+Regresa
+
+sii
+rutinas
+principales
+entonce
+mientrass
+entrro
+rutna
+
+// 3.7 SECUENCIAS EXTRAÑAS
+~~!!@@##$$%%^^&&**(());
+||||||||||||||||||||;
+????????????????;
+................;
+++++++++++++++++;
+----------------;
+****************;
+////////////////;
+
+// 3.8 PRUEBAS DE LÍMITES
+identificadorMuyMuyMuyMuyMuyMuyMuyMuyMuyMuyMuyMuyMuyMuyMuyMuyLargo123456789
+999999999999999999999999999999
+"Esta es una cadena extremadamente larga que contiene muchas palabras y caracteres para probar los límites del analizador léxico y ver cómo maneja cadenas de gran tamaño con diversos símbolos y números 123456789"
+
+// 3.9 COMBINACIONES PROBLEMÁTICAS
+entero{variable}[123];
+si(a>=b)entonces{regresa;}
+mientras(x<=y)haz{x=x+1;}
+
+entero    variable    =    123    ;
+si    (    a    >    b    )    entonces    {    }
+
+entero 123abc = "cadena válida";
+si (variable@ > 123.45) entonces {
+    "mezcla" de válido e @inválido;
+}
+
+// ===== FIN DEL ARCHIVO DE PRUEBA =====
