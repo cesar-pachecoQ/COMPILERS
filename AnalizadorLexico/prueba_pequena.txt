@@ -1,0 +1,88 @@
+// ===== PRUEBA COMPLETA PERO PEQUEÑA =====
+// Archivo que prueba todos los tokens sin overflow
+
+// === TOKENS VÁLIDOS ===
+
+// 1. Palabras reservadas
+entero numero = 42;
+rutina miFuncion;
+principal inicio;
+si condicion;
+entonces accion;
+otro opcion;
+mientras ciclo;
+haz tarea;
+regresa valor;
+
+// 2. Números válidos
+0
+123
+999
+
+// 3. Identificadores válidos
+variable
+var123
+miVar
+
+// 4. Cadenas válidas
+""
+"Hola"
+"Texto con números 123"
+"Símbolos: @#$"
+
+// 5. Símbolos y operadores
+; , ( ) { } [ ]
+> < = + - * /
+>= <= != ==
+
+// 6. Programa válido simple
+rutina principal {
+    entero a = 10;
+    entero b = 20;
+    
+    si (a >= b) entonces {
+        "a es mayor o igual";
+    } otro {
+        "b es mayor";
+    }
+    
+    mientras (a <= 100) haz {
+        a = a + 1;
+    }
+    
+    regresa a;
+}
+
+// === TOKENS INVÁLIDOS ===
+
+// 7. Identificadores inválidos
+123abc
+_variable
+var-name
+var$name
+
+// 8. Cadenas mal formadas
+"Sin cerrar
+"Otra sin cerrar
+Texto sin comillas
+
+// 9. Números inválidos
+123.45
+-123
+
+// 10. Caracteres inválidos
+@#$%
+¿¡€
+
+// 11. Operadores malformados
+= =
+> =
+! =
+
+// 12. Palabras reservadas mal escritas
+Entero
+RUTINA
+sii
+entonce
+
+// === FIN DE PRUEBA ===

@@ -1,0 +1,21 @@
+# Errores Léxicos
+
+| Línea | Token Inválido | Mensaje de Error |
+|-------|----------------|------------------|
+|    60 | _              | Carácter no válido |
+|    62 | $              | Carácter no válido |
+|    70 | .              | Carácter no válido |
+|    74 | @              | Carácter no válido |
+|    74 | #              | Carácter no válido |
+|    74 | $              | Carácter no válido |
+|    74 | %              | Carácter no válido |
+|    75 | �              | Carácter no válido |
+|    75 | �              | Carácter no válido |
+|    75 | �              | Carácter no válido |
+|    75 | �              | Carácter no válido |
+|    75 | �              | Carácter no válido |
+|    75 | �              | Carácter no válido |
+|    75 | �              | Carácter no válido |
+|    80 | !              | Carácter no válido |
+
+**Total de errores:** 15
