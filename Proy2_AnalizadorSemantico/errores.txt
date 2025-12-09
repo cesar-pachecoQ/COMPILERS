@@ -1,0 +1,6 @@
+# Errores Léxicos
+
+| Línea | Token Inválido | Mensaje de Error |
+|-------|----------------|------------------|
+
+**Total de errores:** 0

@@ -1,0 +1,18 @@
+entero x, y, suma, producto;
+caracter letra;
+comienza
+    x = 10;
+    y = 20;
+    suma = x + y;
+    producto = x * y;
+    letra = 65;
+    
+    si (suma) ; entonces
+        producto = suma * 2
+    otro
+        producto = suma / 2;
+        
+    mientras (x) haz
+        x = x - 1;
+termina
+
